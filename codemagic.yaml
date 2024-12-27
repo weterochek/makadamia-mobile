@@ -1,0 +1,42 @@
+workflows:
+  flutter-workflow:
+    name: Flutter Build Workflow
+    max_build_duration: 60
+    environment:
+      vars:
+        FLUTTER_VERSION: stable
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+      - name: Run Flutter tests
+        script: |
+          flutter test
+      - name: Build Android app
+        script: |
+          flutter build apk --release
+      - name: Build iOS app
+        script: |
+          flutter build ios --release --no-codesign
+      - name: Archive iOS app
+        script: |
+          xcodebuild -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration Release \
+            archive -archivePath $CM_BUILD_DIR/Runner.xcarchive
+      - name: Export .ipa
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
+            -exportPath $CM_BUILD_DIR/export \
+            -exportOptionsPlist ios/ExportOptions.plist
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - $CM_BUILD_DIR/export/*.ipa
+    publishing:
+      email:
+        recipients:
+          - seryojabaulin25@gmail.com

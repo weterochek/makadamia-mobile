@@ -20,8 +20,23 @@ workflows:
       - name: Build iOS app (no codesign)
         script: |
           flutter build ios --release --no-codesign
+      - name: Archive iOS app
+        script: |
+          xcodebuild -workspace ios/Runner.xcworkspace \
+            -scheme Runner \
+            -sdk iphoneos \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            archive -archivePath $CM_BUILD_DIR/Runner.xcarchive
+      - name: Export .ipa
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/Runner.xcarchive \
+            -exportPath $CM_BUILD_DIR/export \
+            -exportOptionsPlist ios/ExportOptions.plist
     artifacts:
       - build/**/outputs/**/*.apk
+      - $CM_BUILD_DIR/export/*.ipa
     publishing:
       email:
         recipients:

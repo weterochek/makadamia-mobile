@@ -1,41 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp(websiteUrl: "https://mobile-site.onrender.com"));
 }
 
 class MyApp extends StatelessWidget {
+  final String websiteUrl;
+  final bool skipLaunch;
+
+  const MyApp({Key? key, required this.websiteUrl, this.skipLaunch = false}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: WebViewApp(),
+      home: WebsiteLauncher(websiteUrl: websiteUrl, skipLaunch: skipLaunch),
     );
   }
 }
 
-class WebViewApp extends StatefulWidget {
+class WebsiteLauncher extends StatefulWidget {
+  final String websiteUrl;
+  final bool skipLaunch;
+
+  const WebsiteLauncher({Key? key, required this.websiteUrl, this.skipLaunch = false}) : super(key: key);
+
   @override
-  State<WebViewApp> createState() => _WebViewAppState();
+  _WebsiteLauncherState createState() => _WebsiteLauncherState();
 }
 
-class _WebViewAppState extends State<WebViewApp> {
-  late final WebViewController _controller;
+class _WebsiteLauncherState extends State<WebsiteLauncher> {
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('https://mobile-site.onrender.com')); // Укажите ваш URL
+    if (!widget.skipLaunch) {
+      _launchWebsite();
+    }
+  }
+
+  Future<void> _launchWebsite() async {
+    try {
+      final Uri url = Uri.parse(widget.websiteUrl);
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch ${widget.websiteUrl}';
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: WebViewWidget(controller: _controller),
+      body: Center(
+        child: _errorMessage == null
+            ? CircularProgressIndicator()
+            : Text('Error: $_errorMessage'),
       ),
     );
   }

@@ -34,6 +34,7 @@ workflows:
             -archivePath $CM_BUILD_DIR/Runner.xcarchive \
             -exportPath $CM_BUILD_DIR/export \
             -exportOptionsPlist ios/ExportOptions.plist
+
     artifacts:
       - build/**/outputs/**/*.apk
       - $CM_BUILD_DIR/export/*.ipa

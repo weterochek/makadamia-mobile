@@ -1,6 +1,6 @@
 {
   "versionCode": 5,
-  "versionName": "1.2.0",
-  "apkUrl": "https://github.com/weterochek/makadamia-mobile/releases/download/v1.0.4/makadamia.apk",
+  "versionName": "1.2.1",
+  "apkUrl": "https://github.com/weterochek/makadamia-mobile/releases/download/v1.0.4/app-release.apk",
   "changeLog": "🔧 Обновлено:\n- Новые функции\n- Исправлены ошибки"
 }

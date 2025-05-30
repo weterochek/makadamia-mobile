@@ -1,0 +1,6 @@
+{
+  "versionCode": 2,
+  "versionName": "1.1.0",
+  "apkUrl": "https://github.com/yourname/yourrepo/releases/download/v1.1/app-release.apk",
+  "changeLog": "🔧 Обновлено:\n- Новые функции\n- Исправлены ошибки"
+}

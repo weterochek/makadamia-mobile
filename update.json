@@ -2,5 +2,5 @@
   "versionCode": 7,
   "versionName": "1.3.4",
   "apkUrl": "https://github.com/weterochek/makadamia-mobile/releases/download/v1.0.5/makadamia.apk",
-  "changeLog": "🔧 Обновлено:\n- Смена движка"
+  "changeLog": "🔧 Обновлено:\n- Смена движка \n- Добавлен splash-экран\n- улучшено обновление токена\n " 
 }
